@@ -17,6 +17,14 @@ document.addEventListener("keydown", handleStart, { once: true });
 let lastTime;
 let speedScale;
 let score;
+let highScore = localStorage.getItem("highscore")
+	? parseInt(localStorage.getItem("highscore"))
+	: 0;
+
+window.addEventListener("DOMContentLoaded", function () {
+	this.document.querySelector(".real-high-score").textContent = highScore;
+});
+
 function update(time) {
 	if (lastTime == null) {
 		lastTime = time;
@@ -56,6 +64,8 @@ function updateSpeedScale(delta) {
 
 function updateScore(delta) {
 	score += delta * 0.01;
+	highScore = Math.max(Math.floor(score), highScore);
+	localStorage.setItem("highscore", highScore);
 	scoreElem.textContent = Math.floor(score);
 }
 
@@ -63,6 +73,7 @@ function handleStart() {
 	lastTime = null;
 	speedScale = 1;
 	score = 0;
+	document.querySelector(".real-high-score").textContent = highScore;
 	setupGround();
 	setupDino();
 	setupCactus();
